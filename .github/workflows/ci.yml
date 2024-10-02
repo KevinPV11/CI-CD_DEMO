@@ -22,22 +22,31 @@ jobs:
         java-version: '17'
         distribution: 'adopt'
 
+    - name: Set up Maven
+      uses: actions/setup-java@v1
+      with:
+        java-version: '17'
+
+    - name: Build with Maven
+      run: mvn package
+      working-directory: demo  # Asegúrate de que la carpeta demo contiene el pom.xml
+
     - name: Check Docker and Docker Compose versions
       run: |
         docker --version
-        docker compose version  # Usa docker compose en lugar de docker-compose
+        docker compose version
 
     - name: Build Docker image and run Docker Compose
       run: |
-        docker compose up --build -d  # Cambiar docker-compose a docker compose
+        docker compose up --build -d
       working-directory: demo
 
     - name: Run tests (if applicable)
-      run: docker exec java_app java -jar java-app.jar  # Aquí puedes ejecutar tus tests si tienes alguno preparado
+      run: docker exec java_app java -jar java-app.jar
 
     - name: Stop and clean Docker Compose
       run: |
-        docker compose down  # Cambiar docker-compose a docker compose
+        docker compose down
       working-directory: demo
 
     - name: Remove dangling images and containers
